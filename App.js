@@ -35,10 +35,10 @@ export default function App() {
 
     const video = await cam.current.recordAsync(
       Platform.OS === "ios"
-        ? (recordOptions = {
+        ? {
             codec: Camera.Constants.VideoCodec.H264,
             quality: Camera.Constants.VideoQuality["720p"],
-          })
+          }
         : (recordOptions = {
             quality: Camera.Constants.VideoQuality["480p"],
           })
