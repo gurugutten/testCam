@@ -1,15 +1,7 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Dimensions,
-  View,
-  Button,
-  Text,
-  Platform,
-} from "react-native";
+import { StyleSheet, View, Button, Platform } from "react-native";
 import { Camera } from "expo-camera";
 import { useRef, useState, useEffect } from "react";
-import { Video, AVPlaybackStatus } from "expo-av";
+import { Video } from "expo-av";
 
 export default function App() {
   const cam = useRef(null);
@@ -45,6 +37,7 @@ export default function App() {
       Platform.OS === "ios"
         ? (recordOptions = {
             codec: Camera.Constants.VideoCodec.H264,
+            quality: Camera.Constants.VideoQuality["720p"],
           })
         : (recordOptions = {
             quality: Camera.Constants.VideoQuality["480p"],
@@ -63,7 +56,7 @@ export default function App() {
 
   return (
     <>
-      {uri === "" && (
+      {uri === "" && permission && (
         <View style={styles.container}>
           <Camera
             ref={cam}
