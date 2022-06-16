@@ -39,9 +39,9 @@ export default function App() {
             codec: Camera.Constants.VideoCodec.H264,
             quality: Camera.Constants.VideoQuality["720p"],
           }
-        : (recordOptions = {
+        : {
             quality: Camera.Constants.VideoQuality["480p"],
-          })
+          }
     );
     setUri(video.uri);
   };
