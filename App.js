@@ -1,5 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Dimensions, View, Button, Text } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+  View,
+  Button,
+  Text,
+  Platform,
+} from "react-native";
 import { Camera } from "expo-camera";
 import { useRef, useState, useEffect } from "react";
 import { Video, AVPlaybackStatus } from "expo-av";
@@ -17,10 +24,12 @@ export default function App() {
     const _handlePermissions = async () => {
       const status = await Camera.requestCameraPermissionsAsync();
       const audioStatus = await Camera.requestMicrophonePermissionsAsync();
+
       if (status.granted === true && audioStatus.granted === true) {
         setPermission(true);
       }
     };
+
     _handlePermissions();
   }, []);
 
@@ -31,7 +40,16 @@ export default function App() {
 
   const _startRecord = async () => {
     setRecording(true);
-    const video = await cam.current.recordAsync({});
+
+    const video = await cam.current.recordAsync(
+      Platform.OS === "ios"
+        ? (recordOptions = {
+            codec: Camera.Constants.VideoCodec.H264,
+          })
+        : (recordOptions = {
+            quality: Camera.Constants.VideoQuality["480p"],
+          })
+    );
     setUri(video.uri);
   };
 
@@ -42,8 +60,6 @@ export default function App() {
       video.current && video.current.playAsync();
     }
   }, [playing]);
-
-  useEffect(() => console.log(cam.current), [cam.current]);
 
   return (
     <>
@@ -62,7 +78,7 @@ export default function App() {
               height: 300,
               width: 400,
             }}
-          ></Camera>
+          />
         </View>
       )}
       <View>
